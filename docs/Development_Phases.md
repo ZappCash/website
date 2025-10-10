@@ -196,7 +196,7 @@ export function cn(...inputs: ClassValue[]) {
 
 ---
 
-## Fase 1: Componentes Base Reutilizables
+## Fase 1: Componentes Base Reutilizables ✅
 
 **Objetivo**: Crear componentes React reutilizables fundamentales
 
@@ -257,7 +257,6 @@ export function cn(...inputs: ClassValue[]) {
 **Objetivo**: Navbar que cambia de transparente a sólido al hacer scroll
 
 ### Referencia
-Ver ejemplo de Exodus: navbar con logo, links, botón CTA
 
 ### Tareas
 
@@ -301,12 +300,11 @@ Ver ejemplo de Exodus: navbar con logo, links, botón CTA
 
 ## Fase 3: Hero Section Estilo Exodus
 
-**Objetivo**: Hero centrado con fondo degradado morado/negro, título grande y mockups de dispositivos
+**Objetivo**: Hero centrado con fondo degradado verde/negro, título grande y mockups de dispositivos
 
 ### Referencia Visual
-Imagen 1 proporcionada (Exodus): 
-- Fondo degradado morado oscuro con glow sutil
-- Título grande centrado "Bitcoin and crypto wallet"
+- Fondo degradado verde oscuro con glow sutil
+- Título grande centrado "ZappCash Finance"
 - Subtítulo debajo
 - Botón de descarga grande centrado
 - Mockups de laptop y móvil en la parte inferior
