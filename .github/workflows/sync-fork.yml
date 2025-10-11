@@ -42,4 +42,4 @@ jobs:
           git remote add fork "https://x-access-token:${TOKEN}@github.com/danielcdz/website.git"
           git remote -v
 
-          git push fork sync-upstream:main --force-with-lease
+          git push fork sync-upstream:main --force
