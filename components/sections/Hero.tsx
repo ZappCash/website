@@ -35,7 +35,7 @@ export function Hero() {
   const devicesTranslateY = useTransform(scrollYProgress, [0, 1], [0, -300]);
 
   // Rotación del iPhone: empieza en -30deg y llega a 0deg al hacer scroll
-  const phoneRotation = useTransform(scrollYProgress, [0, 0.5], [-30, 0]);
+  const phoneRotation = useTransform(scrollYProgress, [0, 0.25], [-30, 0]);
 
   // Estado para mostrar/ocultar partículas basado en scroll
   const [showParticles, setShowParticles] = useState(true);
@@ -253,7 +253,7 @@ export function Hero() {
         {/* iPhone Mockup */}
         <motion.div
           variants={fadeInUp}
-          className="mt-20 relative flex items-center justify-center max-w-[1400px] mx-auto w-full"
+          className="mt-40 relative flex items-center justify-center max-w-[1400px] mx-auto w-full"
           style={{
             scale: devicesScale,
             y: devicesTranslateY,
@@ -267,7 +267,7 @@ export function Hero() {
             }}
           >
             {/* iPhone Frame - Carcasa realista */}
-            <div className="relative w-[380px] aspect-[9/19.5] rounded-[3rem] bg-[#1c1c1e] p-[14px] shadow-2xl">
+            <div className="relative w-[380px] aspect-[9/17] rounded-[3rem] bg-[#1c1c1e] p-[14px] shadow-2xl" style={{ transform: 'scale(0.7)' }}>
               {/* Botones laterales */}
               <div className="absolute -left-[3px] top-[120px] w-[3px] h-[32px] bg-[#1c1c1e] rounded-l-sm" />
               <div className="absolute -left-[3px] top-[170px] w-[3px] h-[60px] bg-[#1c1c1e] rounded-l-sm" />
