@@ -30,7 +30,9 @@ export function NavbarMenuItem({ item }: NavbarMenuItemProps) {
       <button
         ref={triggerRef}
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors duration-200 font-medium text-base group"
+        className={`flex items-center gap-2 transition-colors duration-200 font-medium text-base group bg-transparent focus:outline-none focus:ring-0 focus:bg-transparent ${
+          isOpen ? 'text-white' : 'text-gray-300 hover:text-white'
+        }`}
         aria-expanded={isOpen}
         aria-haspopup="true"
       >

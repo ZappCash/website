@@ -113,7 +113,7 @@ export function MobileMenu({ isOpen, menuItems, onClose }: MobileMenuProps) {
             <div className="p-6">
               {/* Header */}
               <div className="flex items-center justify-between mb-8">
-                <span className="gradient-text font-black text-xl">ZAPPCASH</span>
+                <span className="text-white font-black text-xl">ZAPPCASH</span>
                 <button
                   onClick={onClose}
                   className="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-dark-800 transition-colors text-gray-400 hover:text-white"

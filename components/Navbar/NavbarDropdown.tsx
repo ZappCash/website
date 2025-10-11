@@ -81,19 +81,28 @@ export function NavbarDropdown({ items, isOpen, onClose, triggerRef }: NavbarDro
           role="menu"
           aria-label="Dropdown menu"
         >
-          {/* Arrow pointing to navbar */}
-          <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[14px] border-l-transparent border-r-[14px] border-r-transparent border-b-[14px] border-b-dark-800/95" />
+          {/* Dropdown Content with integrated arrow */}
+          <div className="relative">
+            {/* SVG Arrow pointing up */}
+            <div className="absolute -top-[11px] left-1/2 -translate-x-1/2 w-6 h-3 overflow-visible">
+              <svg viewBox="0 0 24 12" className="w-full h-full">
+                {/* Border outline */}
+                <path d="M0 12 L12 0 L24 12 Z" fill="rgba(255, 255, 255, 0.1)" />
+                {/* Inner fill */}
+                <path d="M2 12 L12 2 L22 12 Z" fill="black" />
+              </svg>
+            </div>
 
-          {/* Dropdown Content */}
-          <div className="bg-dark-800/95 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-[0_10px_40px_rgba(0,0,0,0.4),0_4px_12px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.05)]">
-            <div className="space-y-2">
-              {items.map((item, index) => (
-                <NavbarDropdownItem
-                  key={index}
-                  item={item}
-                  onClick={onClose}
-                />
-              ))}
+            <div className="bg-black border border-white/10 rounded-2xl p-8 shadow-[0_10px_40px_rgba(0,0,0,0.4),0_4px_12px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.05)]">
+              <div className="space-y-2">
+                {items.map((item, index) => (
+                  <NavbarDropdownItem
+                    key={index}
+                    item={item}
+                    onClick={onClose}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </motion.div>
