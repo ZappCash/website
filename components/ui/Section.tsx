@@ -6,7 +6,7 @@ export interface SectionProps extends HTMLAttributes<HTMLElement> {
   children: ReactNode;
 }
 
-export default function Section({
+export function Section({
   fullHeight = false,
   children,
   className,

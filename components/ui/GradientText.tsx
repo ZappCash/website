@@ -6,7 +6,7 @@ export interface GradientTextProps extends HTMLAttributes<HTMLSpanElement> {
   children: ReactNode;
 }
 
-export default function GradientText({
+export function GradientText({
   animated = false,
   children,
   className,

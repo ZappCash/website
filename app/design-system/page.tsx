@@ -1,9 +1,9 @@
 "use client";
 
-import Button from "@/components/ui/Button";
-import GlassCard from "@/components/ui/GlassCard";
-import GradientText from "@/components/ui/GradientText";
-import Section from "@/components/ui/Section";
+import { Button } from "@/components/ui/Button";
+import { GlassCard } from "@/components/ui/GlassCard";
+import { GradientText } from "@/components/ui/GradientText";
+import { Section } from "@/components/ui/Section";
 import { motion } from "framer-motion";
 import { fadeInUp, fadeInLeft, fadeInRight, scaleIn, staggerContainer } from "@/lib/animations";
 

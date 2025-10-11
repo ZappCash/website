@@ -328,7 +328,7 @@ export function cn(...inputs: ClassValue[]) {
 
 ---
 
-## Fase 3: Hero Section Estilo Exodus
+## Fase 3: Hero Section
 
 **Objetivo**: Hero centrado con fondo degradado verde/negro, título grande y mockups de dispositivos
 

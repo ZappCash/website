@@ -6,7 +6,7 @@ export interface GlassCardProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
 }
 
-export default function GlassCard({
+export function GlassCard({
   variant = "default",
   children,
   className,
