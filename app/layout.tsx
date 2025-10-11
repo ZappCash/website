@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar/index";
+import { SmoothScroll } from "@/components/SmoothScroll";
 
 export const metadata: Metadata = {
   title: "ZappCash - The Future of Payments in Costa Rica",
@@ -22,6 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body className="antialiased">
+        <SmoothScroll />
         <Navbar />
         <main>
           {children}

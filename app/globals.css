@@ -19,6 +19,24 @@ body {
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+/* Smooth scroll lento y suave */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  body {
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+  }
+
+  /* Lenis Smooth Scroll alternative usando CSS */
+  * {
+    scroll-behavior: smooth;
+  }
 }
 
 /* Custom scrollbar */
