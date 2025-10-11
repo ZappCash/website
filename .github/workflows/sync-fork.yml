@@ -19,13 +19,13 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          - name: Add fork remote and push
-          env:
-            FORK_PAT: ${{ secrets.FORK_PAT }}
-            FORK_OWNER: danielcdz
-            FORK_REPO: website
-          run: |
-            git fetch origin main
-            git checkout -B sync-upstream origin/main
-            git remote add fork https://${FORK_OWNER}:${FORK_PAT}@github.com/${FORK_OWNER}/${FORK_REPO}.git
-            git push fork sync-upstream:main --force-with-lease
+      - name: Add fork remote and push
+      env:
+        FORK_PAT: ${{ secrets.FORK_PAT }}
+        FORK_OWNER: danielcdz
+        FORK_REPO: website
+      run: |
+        git fetch origin main
+        git checkout -B sync-upstream origin/main
+        git remote add fork https://${FORK_OWNER}:${FORK_PAT}@github.com/${FORK_OWNER}/${FORK_REPO}.git
+        git push fork sync-upstream:main --force-with-lease
