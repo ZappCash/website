@@ -9,7 +9,7 @@ export function NavbarLogo() {
       <div className="w-9 h-9 bg-gradient-primary rounded-lg flex items-center justify-center shadow-glow-sm group-hover:shadow-glow-md transition-all duration-300">
         <Zap className="w-5 h-5 text-dark-900 fill-dark-900" />
       </div>
-      <span className="gradient-text font-black text-xl lg:text-2xl tracking-tight">
+      <span className="font-black text-xl lg:text-2xl tracking-tight text-white">
         ZAPPCASH
       </span>
     </Link>

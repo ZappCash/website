@@ -1,13 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { fadeInUp, scaleIn, staggerContainer } from "@/lib/animations";
 import { GradientText } from "@/components/ui/GradientText";
 import { ChevronDown, Lock } from "lucide-react";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
 import type { Engine } from "@tsparticles/engine";
+import { AnimatedGradientBackground } from "@/components/ui/AnimatedGradientBackground";
 
 export function Hero() {
   const [scrollY, setScrollY] = useState(0);
@@ -109,52 +110,8 @@ export function Hero() {
 
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-start overflow-hidden">
-      {/* Background Gradient - Base vertical */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: `linear-gradient(
-            180deg,
-            #050505 0%,
-            #0a0a0a 20%,
-            #0a1510 40%,
-            #0c1f14 70%,
-            #0D2818 100%
-          )`
-        }}
-      />
-
-      {/* Glow suave desde abajo - Capa 1 */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: `radial-gradient(
-            ellipse 140% 90% at 50% 100%,
-            rgba(0, 255, 136, 0.35) 0%,
-            rgba(0, 204, 102, 0.25) 25%,
-            rgba(0, 153, 77, 0.15) 45%,
-            transparent 65%
-          )`,
-          filter: 'blur(60px)'
-        }}
-      />
-
-      {/* Glow intenso desde abajo - Capa 2 */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: `radial-gradient(
-            ellipse 90% 50% at 50% 100%,
-            rgba(0, 255, 136, 0.7) 0%,
-            rgba(0, 230, 115, 0.5) 20%,
-            rgba(0, 204, 102, 0.3) 40%,
-            rgba(0, 153, 77, 0.15) 50%,
-            transparent 70%
-          )`,
-          filter: 'blur(40px)',
-          mixBlendMode: 'screen'
-        }}
-      />
+      {/* Animated Gradient Background with Canvas */}
+      <AnimatedGradientBackground />
 
       {/* Partículas Animadas con TSParticles - Solo visible en Hero */}
       {init && showParticles && (
@@ -239,54 +196,53 @@ export function Hero() {
               opacity: headlineOpacity,
             }}
           >
-            Decentralized payments without limits. Send and receive money instantly
-            with ultra-low fees of just <span className="text-primary font-semibold">0.02%</span>.
+            Seamless, secure, self-custodial. Swap, buy, and manage a diverse portfolio in one place.
           </motion.p>
 
           {/* CTA Button */}
           <motion.div
             variants={scaleIn}
-            className="mb-5"
             style={{ opacity: headlineOpacity }}
           >
             <button
-              className="inline-flex items-center justify-center gap-3 px-10 py-[18px] min-w-[300px] rounded-full text-[18px] font-semibold text-black transition-all duration-300 ease-out cursor-pointer select-none"
+              className="inline-flex items-center justify-center gap-3 px-10 py-[18px] min-w-[300px] rounded-full text-[18px] font-semibold transition-all duration-300 ease-out cursor-pointer select-none"
               style={{
-                background: 'linear-gradient(135deg, #00FF88 0%, #00CC66 100%)',
+                background: 'white',
+                color: 'black',
                 boxShadow: `
-                  0 12px 32px rgba(0, 255, 136, 0.4),
-                  0 4px 12px rgba(0, 255, 136, 0.2),
+                  0 12px 32px rgba(255, 255, 255, 0.25),
+                  0 4px 12px rgba(255, 255, 255, 0.15),
                   inset 0 1px 0 rgba(255, 255, 255, 0.3)
                 `
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'translateY(-3px)';
                 e.currentTarget.style.boxShadow = `
-                  0 16px 40px rgba(0, 255, 136, 0.5),
-                  0 8px 16px rgba(0, 255, 136, 0.3),
+                  0 16px 40px rgba(255, 255, 255, 0.35),
+                  0 8px 16px rgba(255, 255, 255, 0.25),
                   inset 0 1px 0 rgba(255, 255, 255, 0.4)
                 `;
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = 'translateY(0)';
                 e.currentTarget.style.boxShadow = `
-                  0 12px 32px rgba(0, 255, 136, 0.4),
-                  0 4px 12px rgba(0, 255, 136, 0.2),
+                  0 12px 32px rgba(255, 255, 255, 0.25),
+                  0 4px 12px rgba(255, 255, 255, 0.15),
                   inset 0 1px 0 rgba(255, 255, 255, 0.3)
                 `;
               }}
               onMouseDown={(e) => {
                 e.currentTarget.style.transform = 'translateY(-1px)';
                 e.currentTarget.style.boxShadow = `
-                  0 8px 24px rgba(0, 255, 136, 0.4),
-                  0 4px 8px rgba(0, 255, 136, 0.2)
+                  0 8px 24px rgba(255, 255, 255, 0.25),
+                  0 4px 8px rgba(255, 255, 255, 0.15)
                 `;
               }}
               onMouseUp={(e) => {
                 e.currentTarget.style.transform = 'translateY(-3px)';
                 e.currentTarget.style.boxShadow = `
-                  0 16px 40px rgba(0, 255, 136, 0.5),
-                  0 8px 16px rgba(0, 255, 136, 0.3),
+                  0 16px 40px rgba(255, 255, 255, 0.35),
+                  0 8px 16px rgba(255, 255, 255, 0.25),
                   inset 0 1px 0 rgba(255, 255, 255, 0.4)
                 `;
               }}
@@ -294,37 +250,6 @@ export function Hero() {
               Join Waitlist
             </button>
           </motion.div>
-
-          {/* Secondary Link */}
-          <motion.p
-            variants={fadeInUp}
-            className="text-[15px] font-medium"
-            style={{ opacity: headlineOpacity }}
-          >
-            <a
-              href="#"
-              className="transition-all duration-250 ease-out"
-              style={{
-                color: 'rgba(255, 255, 255, 0.65)',
-                textDecoration: 'underline',
-                textDecorationColor: 'rgba(255, 255, 255, 0.35)',
-                textDecorationThickness: '1px',
-                textUnderlineOffset: '4px',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = 'rgba(255, 255, 255, 0.95)';
-                e.currentTarget.style.textDecorationColor = 'rgba(255, 255, 255, 0.7)';
-                e.currentTarget.style.textUnderlineOffset = '5px';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = 'rgba(255, 255, 255, 0.65)';
-                e.currentTarget.style.textDecorationColor = 'rgba(255, 255, 255, 0.35)';
-                e.currentTarget.style.textUnderlineOffset = '4px';
-              }}
-            >
-              Available on other devices
-            </a>
-          </motion.p>
         </div>
 
         {/* Device Mockups - Laptop + Mobile */}
@@ -338,7 +263,7 @@ export function Hero() {
         >
           {/* Laptop Mockup */}
           <div
-            className="relative z-[2] -mr-[120px]"
+            className="relative z-[2] -mr-[120px] mb-[60px]"
             style={{
               transform: 'perspective(1200px) rotateY(-8deg) rotateX(3deg) translateZ(0)',
               filter: 'drop-shadow(0 30px 60px rgba(0, 0, 0, 0.4))',
