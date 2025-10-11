@@ -10,21 +10,44 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
+        with:
+          fetch-depth: 0
 
       - name: Set git identity
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Push to fork with PAT
+      - name: Validate token is present
+        env:
+          TOKEN: ${{ secrets.SYNC_TOKEN }}   # <-- your repo secret
+        run: |
+          set -euo pipefail
+          if [ -z "${TOKEN:-}" ]; then
+            echo "ERROR: SYNC_TOKEN secret is empty or missing"; exit 1
+          fi
+          echo "Token looks present (length: ${#TOKEN})"
+
+      - name: Push to fork using Authorization header
         env:
           TOKEN: ${{ secrets.SYNC_TOKEN }}
         run: |
           set -euo pipefail
+
           git fetch origin main
           git checkout -B sync-upstream origin/main
 
-          # Use x-access-token to avoid username gotchas
-          git remote add fork https://x-access-token:${TOKEN}@github.com/danielcdz/website.git
-          git push fork sync-upstream:main --force-with-lease
+          # Inject PAT for all https://github.com requests
+          git config http.https://github.com/.extraheader "AUTHORIZATION: Bearer ${TOKEN}"
+
+          # (Optional) prove auth works against the fork
+          git ls-remote https://github.com/danielcdz/website.git >/dev/null
+
+          # Push to the fork's main
+          git push https://github.com/danielcdz/website.git sync-upstream:main --force-with-lease
+
+          # Cleanup
+          git config --unset-all http.https://github.com/.extraheader || true
+
+      - name: Show remotes (debug)
+        run: git remote -v
