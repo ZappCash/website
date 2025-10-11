@@ -9,23 +9,22 @@ jobs:
     if: github.repository == 'zappcash/website'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout upstream with full history
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
 
       - name: Set git identity
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Add fork remote and push
+      - name: Push to fork with PAT
         env:
-          FORK_PAT: ${{ secrets.FORK_PAT }}
-          FORK_OWNER: danielcdz
-          FORK_REPO: website
+          TOKEN: ${{ secrets.FORK_PAT }}   # Fine-grained PAT with Contents: Read/Write on danielcdz/website
         run: |
+          set -euo pipefail
           git fetch origin main
           git checkout -B sync-upstream origin/main
-          git remote add fork https://${FORK_OWNER}:${FORK_PAT}@github.com/${FORK_OWNER}/${FORK_REPO}.git
+
+          # Use x-access-token to avoid username gotchas
+          git remote add fork https://x-access-token:${TOKEN}@github.com/danielcdz/website.git
           git push fork sync-upstream:main --force-with-lease
