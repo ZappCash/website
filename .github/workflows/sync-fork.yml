@@ -19,8 +19,12 @@ jobs:
 
       - name: Push to fork with PAT
         env:
-          TOKEN: ${{ secrets.FORK_PAT }}   # Fine-grained PAT with Contents: Read/Write on danielcdz/website
+          TOKEN: ${{ secrets.FORK_PAT }}
         run: |
+          if [ -z "$TOKEN" ]; then
+            echo "Error: FORK_PAT secret is not set"
+            exit 1
+          fi
           set -euo pipefail
           git fetch origin main
           git checkout -B sync-upstream origin/main
