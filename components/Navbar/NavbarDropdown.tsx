@@ -9,7 +9,7 @@ interface NavbarDropdownProps {
   items: DropdownItem[];
   isOpen: boolean;
   onClose: () => void;
-  triggerRef: React.RefObject<HTMLButtonElement>;
+  triggerRef: React.RefObject<HTMLButtonElement | null>;
 }
 
 const dropdownVariants: Variants = {
