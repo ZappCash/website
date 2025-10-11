@@ -1,17 +1,41 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { fadeInUp, scaleIn, staggerContainer } from "@/lib/animations";
 import { GradientText } from "@/components/ui/GradientText";
 import { ChevronDown, Lock } from "lucide-react";
+import Particles, { initParticlesEngine } from "@tsparticles/react";
+import { loadSlim } from "@tsparticles/slim";
+import type { Engine } from "@tsparticles/engine";
 
 export function Hero() {
   const [scrollY, setScrollY] = useState(0);
+  const [init, setInit] = useState(false);
+
+  // Inicializar tsParticles
+  useEffect(() => {
+    initParticlesEngine(async (engine: Engine) => {
+      await loadSlim(engine);
+    }).then(() => {
+      setInit(true);
+    });
+  }, []);
 
   useEffect(() => {
+    let ticking = false;
+    let lastScrollY = 0;
+
     const handleScroll = () => {
-      setScrollY(window.scrollY);
+      lastScrollY = window.scrollY;
+
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setScrollY(lastScrollY);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -22,77 +46,130 @@ export function Hero() {
   const headlineOpacity = Math.max(0, 1 - scrollY / 300);
   const devicesScale = Math.min(1.3, 1 + scrollY / 1000);
   const devicesTranslateY = -scrollY * 0.3; // Parallax
+  const showParticles = scrollY < 50; // Ocultar partículas al hacer scroll
+
+  // Configuración de partículas optimizada para rendimiento
+  const particlesOptions = useMemo(() => ({
+    background: {
+      color: {
+        value: "transparent",
+      },
+    },
+    fpsLimit: 30,
+    interactivity: {
+      events: {
+        onClick: {
+          enable: false,
+        },
+        onHover: {
+          enable: false,
+        },
+        resize: {
+          enable: true,
+        } as any,
+      },
+    },
+    particles: {
+      color: {
+        value: "#ffffff",
+      },
+      links: {
+        color: "#00FF88",
+        distance: 120,
+        enable: true,
+        opacity: 0.25,
+        width: 0.8,
+      },
+      move: {
+        enable: true,
+        random: false,
+        speed: 0.2,
+        direction: "none" as const,
+        outModes: {
+          default: "out" as const,
+        },
+        straight: false,
+      },
+      number: {
+        density: {
+          enable: true,
+        } as any,
+        value: 30,
+      },
+      opacity: {
+        value: 0.4,
+      },
+      size: {
+        value: 1.5,
+      },
+    },
+    detectRetina: true,
+    smooth: true,
+  }), []);
 
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-start overflow-hidden">
-      {/* Background Gradient - Verde oscuro a negro estilo Exodus */}
+      {/* Background Gradient - Base vertical */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: `
-            linear-gradient(
-              180deg,
-              #0D2818 0%,
-              #0a1510 15%,
-              #0a0a0a 50%,
-              #050505 100%
-            )
-          `
+          background: `linear-gradient(
+            180deg,
+            #050505 0%,
+            #0a0a0a 20%,
+            #0a1510 40%,
+            #0c1f14 70%,
+            #0D2818 100%
+          )`
         }}
       />
 
-      {/* Radial Overlays para profundidad */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div
-          className="absolute inset-0"
-          style={{
-            background: `
-              radial-gradient(
-                ellipse 800px 600px at 50% 20%,
-                rgba(0, 255, 136, 0.15),
-                transparent 70%
-              )
-            `
-          }}
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            background: `
-              radial-gradient(
-                ellipse 1000px 800px at 50% 80%,
-                rgba(0, 204, 102, 0.1),
-                transparent 60%
-              )
-            `
-          }}
-        />
-      </div>
+      {/* Glow suave desde abajo - Capa 1 */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: `radial-gradient(
+            ellipse 140% 90% at 50% 100%,
+            rgba(0, 255, 136, 0.35) 0%,
+            rgba(0, 204, 102, 0.25) 25%,
+            rgba(0, 153, 77, 0.15) 45%,
+            transparent 65%
+          )`,
+          filter: 'blur(60px)'
+        }}
+      />
 
-      {/* Partículas/Estrellas de Fondo */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-40">
-        {Array.from({ length: 80 }, () => ({
-          x: Math.random() * 100,
-          y: Math.random() * 100,
-          size: Math.random() * 2 + 0.5,
-          opacity: Math.random() * 0.5 + 0.2,
-          delay: Math.random() * 20
-        })).map((particle, i) => (
-          <div
-            key={i}
-            className="absolute rounded-full bg-white"
+      {/* Glow intenso desde abajo - Capa 2 */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: `radial-gradient(
+            ellipse 90% 50% at 50% 100%,
+            rgba(0, 255, 136, 0.7) 0%,
+            rgba(0, 230, 115, 0.5) 20%,
+            rgba(0, 204, 102, 0.3) 40%,
+            rgba(0, 153, 77, 0.15) 50%,
+            transparent 70%
+          )`,
+          filter: 'blur(40px)',
+          mixBlendMode: 'screen'
+        }}
+      />
+
+      {/* Partículas Animadas con TSParticles - Solo visible en Hero */}
+      {init && showParticles && (
+        <div className="absolute inset-0 z-[1] pointer-events-none">
+          <Particles
+            id="tsparticles"
+            options={particlesOptions}
             style={{
-              left: `${particle.x}%`,
-              top: `${particle.y}%`,
-              width: `${particle.size}px`,
-              height: `${particle.size}px`,
-              opacity: particle.opacity,
-              animation: `float-slower ${15 + particle.delay}s ease-in-out infinite`,
-              animationDelay: `${particle.delay}s`,
+              position: 'absolute',
+              width: '100%',
+              height: '100%',
             }}
           />
-        ))}
-      </div>
+        </div>
+      )}
 
       {/* Glow Effect en los Bordes Inferiores */}
       <div
@@ -141,6 +218,7 @@ export function Hero() {
               WebkitFontSmoothing: 'antialiased',
               MozOsxFontSmoothing: 'grayscale',
               textRendering: 'optimizeLegibility',
+              willChange: 'transform, opacity',
             }}
           >
             <span className="text-white">
@@ -172,43 +250,44 @@ export function Hero() {
             style={{ opacity: headlineOpacity }}
           >
             <button
-              className="inline-flex items-center justify-center gap-3 px-10 py-[18px] min-w-[300px] bg-white rounded-full text-[18px] font-semibold text-[#0f0f0f] transition-all duration-300 ease-out cursor-pointer select-none"
+              className="inline-flex items-center justify-center gap-3 px-10 py-[18px] min-w-[300px] rounded-full text-[18px] font-semibold text-black transition-all duration-300 ease-out cursor-pointer select-none"
               style={{
+                background: 'linear-gradient(135deg, #00FF88 0%, #00CC66 100%)',
                 boxShadow: `
-                  0 12px 32px rgba(0, 0, 0, 0.25),
-                  0 4px 12px rgba(0, 0, 0, 0.15),
-                  inset 0 1px 0 rgba(255, 255, 255, 0.4)
+                  0 12px 32px rgba(0, 255, 136, 0.4),
+                  0 4px 12px rgba(0, 255, 136, 0.2),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.3)
                 `
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'translateY(-3px)';
                 e.currentTarget.style.boxShadow = `
-                  0 16px 40px rgba(0, 0, 0, 0.3),
-                  0 8px 16px rgba(0, 0, 0, 0.2),
-                  inset 0 1px 0 rgba(255, 255, 255, 0.5)
+                  0 16px 40px rgba(0, 255, 136, 0.5),
+                  0 8px 16px rgba(0, 255, 136, 0.3),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.4)
                 `;
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = 'translateY(0)';
                 e.currentTarget.style.boxShadow = `
-                  0 12px 32px rgba(0, 0, 0, 0.25),
-                  0 4px 12px rgba(0, 0, 0, 0.15),
-                  inset 0 1px 0 rgba(255, 255, 255, 0.4)
+                  0 12px 32px rgba(0, 255, 136, 0.4),
+                  0 4px 12px rgba(0, 255, 136, 0.2),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.3)
                 `;
               }}
               onMouseDown={(e) => {
                 e.currentTarget.style.transform = 'translateY(-1px)';
                 e.currentTarget.style.boxShadow = `
-                  0 8px 24px rgba(0, 0, 0, 0.25),
-                  0 4px 8px rgba(0, 0, 0, 0.15)
+                  0 8px 24px rgba(0, 255, 136, 0.4),
+                  0 4px 8px rgba(0, 255, 136, 0.2)
                 `;
               }}
               onMouseUp={(e) => {
                 e.currentTarget.style.transform = 'translateY(-3px)';
                 e.currentTarget.style.boxShadow = `
-                  0 16px 40px rgba(0, 0, 0, 0.3),
-                  0 8px 16px rgba(0, 0, 0, 0.2),
-                  inset 0 1px 0 rgba(255, 255, 255, 0.5)
+                  0 16px 40px rgba(0, 255, 136, 0.5),
+                  0 8px 16px rgba(0, 255, 136, 0.3),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.4)
                 `;
               }}
             >
@@ -254,6 +333,7 @@ export function Hero() {
           className="mt-20 relative flex items-end justify-center h-[600px] max-w-[1400px] mx-auto w-full"
           style={{
             transform: `scale(${devicesScale}) translateY(${devicesTranslateY}px)`,
+            willChange: 'transform',
           }}
         >
           {/* Laptop Mockup */}

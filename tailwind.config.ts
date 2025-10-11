@@ -63,7 +63,9 @@ const config: Config = {
         },
         "float-slower": {
           "0%, 100%": { transform: "translateY(0px) translateX(0px)" },
-          "50%": { transform: "translateY(-40px) translateX(-15px)" },
+          "25%": { transform: "translateY(-20px) translateX(30px)" },
+          "50%": { transform: "translateY(-40px) translateX(-30px)" },
+          "75%": { transform: "translateY(-20px) translateX(20px)" },
         },
         shimmer: {
           "0%": { backgroundPosition: "-1000px 0" },
