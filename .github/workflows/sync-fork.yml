@@ -9,9 +9,11 @@ jobs:
     if: github.repository == 'zappcash/website'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout upstream with full history
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          persist-credentials: false   # <-- important
 
       - name: Set git identity
         run: |
@@ -20,34 +22,34 @@ jobs:
 
       - name: Validate token is present
         env:
-          TOKEN: ${{ secrets.SYNC_TOKEN }}   # <-- your repo secret
+          TOKEN: ${{ secrets.SYNC_TOKEN }}
         run: |
           set -euo pipefail
-          if [ -z "${TOKEN:-}" ]; then
-            echo "ERROR: SYNC_TOKEN secret is empty or missing"; exit 1
-          fi
-          echo "Token looks present (length: ${#TOKEN})"
+          test -n "${TOKEN:-}" || { echo "SYNC_TOKEN is empty/missing"; exit 1; }
+          echo "Token length: ${#TOKEN}"
 
       - name: Push to fork using Authorization header
         env:
           TOKEN: ${{ secrets.SYNC_TOKEN }}
         run: |
           set -euo pipefail
+          export GIT_ASKPASS=/bin/true  # avoid interactive prompts
 
           git fetch origin main
           git checkout -B sync-upstream origin/main
 
-          # Inject PAT for all https://github.com requests
-          git config http.https://github.com/.extraheader "AUTHORIZATION: Bearer ${TOKEN}"
+          # Inject PAT for ALL calls to github.com
+          git config --global http.https://github.com/.extraheader "AUTHORIZATION: Bearer ${TOKEN}"
+          git config --global --get-all http.https://github.com/.extraheader
 
-          # (Optional) prove auth works against the fork
+          # Optional: verify auth works
           git ls-remote https://github.com/danielcdz/website.git >/dev/null
 
-          # Push to the fork's main
+          # Push
           git push https://github.com/danielcdz/website.git sync-upstream:main --force-with-lease
 
-          # Cleanup
-          git config --unset-all http.https://github.com/.extraheader || true
+          # Cleanup header so the token doesn't linger
+          git config --global --unset-all http.https://github.com/.extraheader || true
 
       - name: Show remotes (debug)
         run: git remote -v
