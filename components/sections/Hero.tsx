@@ -96,7 +96,7 @@ export function Hero() {
         variants={staggerContainer}
         initial="hidden"
         animate="visible"
-        className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 flex flex-col items-center"
+        className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-0 flex flex-col items-center"
       >
         {/* Hero headline, subheadline, and CTA */}
         <HeroContent headlineOpacity={headlineOpacity} />
