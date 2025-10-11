@@ -142,91 +142,46 @@ export function AnimatedGradientBackground() {
       ctx.fillStyle = mediumGlow;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // ===== PASO 5: NÚCLEO BRILLANTE (casi blanco/cyan cegador) =====
+      // ===== PASO 5: NÚCLEO BRILLANTE (reducido - más verde que blanco) =====
       const brightCore = ctx.createRadialGradient(
         centerX,
         bottomY,
         0,
         centerX,
         bottomY,
-        canvas.height * 0.4 // ⬆️ Radio ampliado
+        canvas.height * 0.35
       );
 
-      // Colores MUY claros, casi blancos/cyan en el centro
-      brightCore.addColorStop(0, `rgba(255, 255, 255, 1.0)`); // ⬆️ BLANCO PURO
-      brightCore.addColorStop(0.05, `rgba(240, 255, 245, 1.0)`); // ⬆️ Casi blanco
-      brightCore.addColorStop(0.12, `rgba(200, 255, 220, ${1.0 * pulse})`); // ⬆️ +0.02
-      brightCore.addColorStop(0.22, `rgba(140, 255, 190, ${0.95 * pulse})`); // ⬆️ +0.05
-      brightCore.addColorStop(0.35, `rgba(80, 255, 160, ${0.85 * pulse})`); // ⬆️ +0.10
-      brightCore.addColorStop(0.5, `rgba(0, 255, 136, ${0.7 * pulse})`); // ⬆️ +0.10
-      brightCore.addColorStop(0.68, `rgba(0, 230, 115, ${0.5 * pulse})`); // ⬆️ +0.10
+      // Colores más verdes, menos blanco
+      brightCore.addColorStop(0, `rgba(180, 255, 210, ${0.9 * pulse})`); // Verde claro en vez de blanco
+      brightCore.addColorStop(0.12, `rgba(140, 255, 190, ${0.8 * pulse})`);
+      brightCore.addColorStop(0.25, `rgba(80, 255, 160, ${0.7 * pulse})`);
+      brightCore.addColorStop(0.4, `rgba(0, 255, 136, ${0.6 * pulse})`);
+      brightCore.addColorStop(0.6, `rgba(0, 230, 115, ${0.4 * pulse})`);
       brightCore.addColorStop(0.85, "transparent");
 
       ctx.filter = "blur(50px)";
       ctx.fillStyle = brightCore;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // ===== PASO 6: SUPER NÚCLEO (el punch central ULTRA brillante) =====
+      // ===== PASO 6: NÚCLEO CENTRAL (más sutil) =====
       const superCore = ctx.createRadialGradient(
         centerX,
         bottomY,
         0,
         centerX,
         bottomY,
-        canvas.height * 0.22
+        canvas.height * 0.18
       );
 
-      superCore.addColorStop(0, `rgba(255, 255, 255, 1.0)`); // BLANCO PURO
-      superCore.addColorStop(0.06, `rgba(245, 255, 250, 1.0)`);
-      superCore.addColorStop(0.15, `rgba(220, 255, 235, ${0.98 * pulse})`);
-      superCore.addColorStop(0.28, `rgba(180, 255, 210, ${0.9 * pulse})`);
-      superCore.addColorStop(0.45, `rgba(100, 255, 170, ${0.75 * pulse})`);
-      superCore.addColorStop(0.65, `rgba(0, 255, 136, ${0.55 * pulse})`);
+      superCore.addColorStop(0, `rgba(200, 255, 220, ${0.85 * pulse})`); // Verde muy claro pero no blanco
+      superCore.addColorStop(0.15, `rgba(140, 255, 190, ${0.75 * pulse})`);
+      superCore.addColorStop(0.35, `rgba(80, 255, 160, ${0.6 * pulse})`);
+      superCore.addColorStop(0.6, `rgba(0, 255, 136, ${0.45 * pulse})`);
       superCore.addColorStop(0.85, "transparent");
 
       ctx.filter = "blur(30px)";
       ctx.fillStyle = superCore;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      // ===== PASO 6.5: NÚCLEO ULTRA CONCENTRADO (máximo punch) =====
-      const ultraCore = ctx.createRadialGradient(
-        centerX,
-        bottomY,
-        0,
-        centerX,
-        bottomY,
-        canvas.height * 0.15 // ⬆️ Ligeramente más grande
-      );
-
-      ultraCore.addColorStop(0, `rgba(255, 255, 255, 1.0)`); // BLANCO ABSOLUTO
-      ultraCore.addColorStop(0.08, `rgba(255, 255, 255, 1.0)`); // ⬆️ Mantener blanco puro más tiempo
-      ultraCore.addColorStop(0.2, `rgba(245, 255, 248, 1.0)`); // ⬆️ +0.05
-      ultraCore.addColorStop(0.35, `rgba(220, 255, 235, ${0.98 * pulse})`); // ⬆️ +0.03
-      ultraCore.addColorStop(0.55, `rgba(180, 255, 210, ${0.88 * pulse})`); // ⬆️ +0.08
-      ultraCore.addColorStop(0.8, "transparent");
-
-      ctx.filter = "blur(18px)";
-      ctx.fillStyle = ultraCore;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      // ===== PASO 6.75: HYPER CORE - El "sol" central (NUEVO) =====
-      const hyperCore = ctx.createRadialGradient(
-        centerX,
-        bottomY,
-        0,
-        centerX,
-        bottomY,
-        canvas.height * 0.08 // Núcleo súper concentrado
-      );
-
-      hyperCore.addColorStop(0, `rgba(255, 255, 255, 1.0)`); // Blanco puro
-      hyperCore.addColorStop(0.15, `rgba(255, 255, 255, 1.0)`); // Mantener blanco
-      hyperCore.addColorStop(0.4, `rgba(250, 255, 252, ${1.0 * pulse})`);
-      hyperCore.addColorStop(0.7, `rgba(220, 255, 235, ${0.9 * pulse})`);
-      hyperCore.addColorStop(1, "transparent");
-
-      ctx.filter = "blur(12px)"; // Blur mínimo para definición
-      ctx.fillStyle = hyperCore;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       // ===== PASO 7: Textura/Ruido para efecto orgánico =====

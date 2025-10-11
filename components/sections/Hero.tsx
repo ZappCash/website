@@ -34,6 +34,9 @@ export function Hero() {
   const devicesScale = useTransform(scrollYProgress, [0, 1], [1, 1.3]);
   const devicesTranslateY = useTransform(scrollYProgress, [0, 1], [0, -300]);
 
+  // Oscurecer el fondo progresivamente al hacer scroll
+  const backgroundDarkness = useTransform(scrollYProgress, [0, 0.4, 1], [0, 0.5, 0.8]);
+
   // Rotación del iPhone: empieza en -30deg y llega a 0deg al hacer scroll
   const phoneRotation = useTransform(scrollYProgress, [0, 0.25], [-30, 0]);
 
@@ -113,9 +116,18 @@ export function Hero() {
       {/* Animated Gradient Background with Canvas */}
       <AnimatedGradientBackground />
 
+      {/* Overlay oscuro que aparece con el scroll para reducir saturación */}
+      <motion.div
+        className="absolute inset-0 pointer-events-none z-[1]"
+        style={{
+          background: 'linear-gradient(to bottom, transparent 0%, transparent 50%, rgba(0, 0, 0, 0.6) 70%, rgba(0, 0, 0, 0.95) 100%)',
+          opacity: backgroundDarkness,
+        }}
+      />
+
       {/* Partículas Animadas con TSParticles - Solo visible en Hero */}
       {init && showParticles && (
-        <div className="absolute inset-0 z-[1] pointer-events-none">
+        <div className="absolute inset-0 z-[2] pointer-events-none">
           <Particles
             id="tsparticles"
             options={particlesOptions}
