@@ -6,6 +6,7 @@ import { GradientText } from "@/components/ui/GradientText";
 import { useInViewAnimation } from "@/hooks/useInViewAnimation";
 import dynamic from "next/dynamic";
 import { useState, useEffect, useRef } from "react";
+import { globalConnections } from "@/data/globalConnections";
 
 // Lazy load WorldMap component with priority loading
 const WorldMap = dynamic(
@@ -88,168 +89,6 @@ function GlobalConnections() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Red de Conectividad Financiera Global - Conexiones estratégicas de alto impacto
-  const connections = [
-    // === América del Norte - Europa (Transatlántico) ===
-    {
-      start: { lat: 40.7128, lng: -74.006 }, // Nueva York
-      end: { lat: 51.5074, lng: -0.1278 }, // Londres
-    },
-    {
-      start: { lat: 37.7749, lng: -122.4194 }, // San Francisco
-      end: { lat: 51.5074, lng: -0.1278 }, // Londres
-    },
-    {
-      start: { lat: 40.7128, lng: -74.006 }, // Nueva York
-      end: { lat: 50.1109, lng: 8.6821 }, // Fráncfort
-    },
-    {
-      start: { lat: 43.6532, lng: -79.3832 }, // Toronto
-      end: { lat: 51.5074, lng: -0.1278 }, // Londres
-    },
-
-    // === Europa - Asia ===
-    {
-      start: { lat: 51.5074, lng: -0.1278 }, // Londres
-      end: { lat: 1.3521, lng: 103.8198 }, // Singapur
-    },
-    {
-      start: { lat: 51.5074, lng: -0.1278 }, // Londres
-      end: { lat: 22.3193, lng: 114.1694 }, // Hong Kong
-    },
-    {
-      start: { lat: 50.1109, lng: 8.6821 }, // Fráncfort
-      end: { lat: 35.6762, lng: 139.6503 }, // Tokio
-    },
-    {
-      start: { lat: 51.5074, lng: -0.1278 }, // Londres
-      end: { lat: 25.2048, lng: 55.2708 }, // Dubái
-    },
-    {
-      start: { lat: 48.8566, lng: 2.3522 }, // París
-      end: { lat: 31.2304, lng: 121.4737 }, // Shanghái
-    },
-
-    // === Asia - Oceanía ===
-    {
-      start: { lat: 1.3521, lng: 103.8198 }, // Singapur
-      end: { lat: -33.8688, lng: 151.2093 }, // Sídney
-    },
-    {
-      start: { lat: 22.3193, lng: 114.1694 }, // Hong Kong
-      end: { lat: -33.8688, lng: 151.2093 }, // Sídney
-    },
-
-    // === Asia - Oriente Medio / África ===
-    {
-      start: { lat: 1.3521, lng: 103.8198 }, // Singapur
-      end: { lat: 25.2048, lng: 55.2708 }, // Dubái
-    },
-    {
-      start: { lat: 19.076, lng: 72.8777 }, // Bombay
-      end: { lat: 25.2048, lng: 55.2708 }, // Dubái
-    },
-
-    // === América del Norte - Asia (Transpacífico) ===
-    {
-      start: { lat: 37.7749, lng: -122.4194 }, // San Francisco
-      end: { lat: 31.2304, lng: 121.4737 }, // Shanghái
-    },
-    {
-      start: { lat: 37.7749, lng: -122.4194 }, // San Francisco
-      end: { lat: 39.9042, lng: 116.4074 }, // Pekín
-    },
-    {
-      start: { lat: 40.7128, lng: -74.006 }, // Nueva York
-      end: { lat: 35.6762, lng: 139.6503 }, // Tokio
-    },
-
-    // === América del Norte - América Latina ===
-    {
-      start: { lat: 40.7128, lng: -74.006 }, // Nueva York
-      end: { lat: -23.5505, lng: -46.6333 }, // São Paulo
-    },
-    {
-      start: { lat: 34.0522, lng: -118.2437 }, // Los Ángeles
-      end: { lat: 19.4326, lng: -99.1332 }, // Ciudad de México
-    },
-    {
-      start: { lat: 37.7749, lng: -122.4194 }, // San Francisco
-      end: { lat: -23.5505, lng: -46.6333 }, // São Paulo
-    },
-    {
-      start: { lat: 40.7128, lng: -74.006 }, // Nueva York
-      end: { lat: 9.9281, lng: -84.0907 }, // San José, Costa Rica
-    },
-
-    // === América Latina - Europa ===
-    {
-      start: { lat: -23.5505, lng: -46.6333 }, // São Paulo
-      end: { lat: 51.5074, lng: -0.1278 }, // Londres
-    },
-    {
-      start: { lat: 19.4326, lng: -99.1332 }, // Ciudad de México
-      end: { lat: 40.4168, lng: -3.7038 }, // Madrid
-    },
-
-    // === África - Europa ===
-    {
-      start: { lat: -26.2041, lng: 28.0473 }, // Johannesburgo
-      end: { lat: 51.5074, lng: -0.1278 }, // Londres
-    },
-    {
-      start: { lat: 6.5244, lng: 3.3792 }, // Lagos
-      end: { lat: 51.5074, lng: -0.1278 }, // Londres
-    },
-
-    // === Intra-Continental (Clave) ===
-    // Norteamérica
-    {
-      start: { lat: 37.7749, lng: -122.4194 }, // San Francisco
-      end: { lat: 40.7128, lng: -74.006 }, // Nueva York
-    },
-    // Europa
-    {
-      start: { lat: 51.5074, lng: -0.1278 }, // Londres
-      end: { lat: 48.8566, lng: 2.3522 }, // París
-    },
-    // Asia
-    {
-      start: { lat: 31.2304, lng: 121.4737 }, // Shanghái
-      end: { lat: 1.3521, lng: 103.8198 }, // Singapur
-    },
-    // América Latina
-    {
-      start: { lat: -23.5505, lng: -46.6333 }, // São Paulo
-      end: { lat: 19.4326, lng: -99.1332 }, // Ciudad de México
-    },
-    {
-      start: { lat: -23.5505, lng: -46.6333 }, // São Paulo
-      end: { lat: -34.6037, lng: -58.3816 }, // Buenos Aires
-    },
-    {
-      start: { lat: -23.5505, lng: -46.6333 }, // São Paulo
-      end: { lat: 4.7110, lng: -74.0721 }, // Bogotá
-    },
-    {
-      start: { lat: -23.5505, lng: -46.6333 }, // São Paulo
-      end: { lat: -33.4489, lng: -70.6693 }, // Santiago
-    },
-    {
-      start: { lat: -23.5505, lng: -46.6333 }, // São Paulo
-      end: { lat: 9.9281, lng: -84.0907 }, // San José, Costa Rica
-    },
-    // Oriente Medio
-    {
-      start: { lat: 25.2048, lng: 55.2708 }, // Dubái
-      end: { lat: 32.0853, lng: 34.7818 }, // Tel Aviv
-    },
-    // África
-    {
-      start: { lat: -26.2041, lng: 28.0473 }, // Johannesburgo
-      end: { lat: 6.5244, lng: 3.3792 }, // Lagos
-    },
-  ];
 
   return (
     <div ref={mapContainerRef} className="relative w-full min-h-[500px] flex flex-col">
@@ -272,7 +111,7 @@ function GlobalConnections() {
         </div>
 
         {shouldLoadMap ? (
-          <WorldMap dots={connections} lineColor="#00FF88" />
+          <WorldMap dots={globalConnections} lineColor="#00FF88" />
         ) : (
           <div className="w-full h-full flex items-center justify-center min-h-[400px]">
             <div className="text-primary/20 text-sm">Preparing map...</div>
