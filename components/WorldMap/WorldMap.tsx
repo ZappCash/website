@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useMemo } from "react";
+import { memo, useState, useEffect, useMemo, useRef } from "react";
 // @ts-ignore - dotted-map doesn't have types
 import DottedMap from "dotted-map";
 import { Connection } from "./types";
@@ -116,43 +116,102 @@ function createCurvedPath(dot: Connection) {
   return `M ${start.x} ${start.y} Q ${midX} ${midY} ${end.x} ${end.y}`;
 }
 
-export function WorldMap({
+const WorldMapComponent = ({
   dots = [],
   lineColor = "#00FF88",
   mapColor = "#FFFFFF40",
   mapBgColor = "black",
-}: WorldMapProps) {
-  const svgMap = useMemo(() => {
-    const map = new DottedMap({ height: 120, grid: "diagonal" });
-    return map.getSVG({
-      radius: 0.22,
-      color: mapColor,
-      shape: "circle",
-      backgroundColor: mapBgColor,
-    });
+}: WorldMapProps) => {
+  const [svgMap, setSvgMap] = useState<string>("");
+  const [isVisible, setIsVisible] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Pre-calculate all paths and points (memoized)
+  const curvedPaths = useMemo(() => {
+    return dots.map((dot) => createCurvedPath(dot));
+  }, [dots]);
+
+  const projectedPoints = useMemo(() => {
+    return dots.map((dot) => ({
+      start: projectPoint(dot.start.lat, dot.start.lng),
+      end: projectPoint(dot.end.lat, dot.end.lng),
+    }));
+  }, [dots]);
+
+  // Only defer the heavy DottedMap generation
+  useEffect(() => {
+    let cancelled = false;
+
+    setTimeout(() => {
+      if (cancelled) return;
+      const map = new DottedMap({ height: 120, grid: "diagonal" });
+      const svg = map.getSVG({
+        radius: 0.22,
+        color: mapColor,
+        shape: "circle",
+        backgroundColor: mapBgColor,
+      });
+      setSvgMap(svg);
+    }, 0);
+
+    return () => {
+      cancelled = true;
+    };
   }, [mapColor, mapBgColor]);
 
+  // Detect when map enters viewport to trigger animations
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !isVisible) {
+            setIsVisible(true);
+          }
+        });
+      },
+      {
+        threshold: 0.1, // Trigger when 10% visible
+      }
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [isVisible]);
+
   return (
-    <div className="relative w-full h-full">
+    <div ref={containerRef} className="relative w-full h-full" style={{ willChange: 'transform' }}>
       {/* Base Map */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={`data:image/svg+xml;utf8,${encodeURIComponent(svgMap)}`}
-        className="pointer-events-none w-full h-full object-contain select-none"
-        alt="world map"
-        draggable={false}
-      />
+      {svgMap && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={`data:image/svg+xml;utf8,${encodeURIComponent(svgMap)}`}
+          className="pointer-events-none w-full h-full object-contain select-none"
+          alt="world map"
+          draggable={false}
+          style={{
+            opacity: svgMap ? 1 : 0,
+            transition: 'opacity 0.3s',
+            willChange: 'opacity'
+          }}
+        />
+      )}
 
       {/* Animated Connections */}
       <svg
         viewBox="0 0 800 400"
         className="pointer-events-none absolute inset-0 size-full select-none"
+        style={{ willChange: 'transform' }}
       >
         {/* Static base paths */}
-        {dots.map((dot, i) => (
+        {curvedPaths.map((path, i) => (
           <path
             key={`base-path-${i}`}
-            d={createCurvedPath(dot)}
+            d={path}
             fill="none"
             stroke={lineColor}
             strokeWidth="0.5"
@@ -160,47 +219,25 @@ export function WorldMap({
           />
         ))}
 
-        {/* Animated paths with gradient - pulsing effect */}
-        {dots.map((dot, i) => (
-          <g key={`path-group-${i}`}>
-            {/* Main path with initial draw animation */}
-            <motion.path
-              d={createCurvedPath(dot)}
-              fill="none"
-              stroke="url(#path-gradient)"
-              strokeWidth="1.5"
-              initial={{ pathLength: 0, opacity: 0 }}
-              animate={{
-                pathLength: [0, 1, 1],
-                opacity: [0, 0.9, 0.6]
-              }}
-              transition={{
-                duration: 2,
-                delay: 0.3 * i,
-                ease: "easeInOut",
-              }}
-            />
-
-            {/* Pulsing glow effect that repeats */}
-            <motion.path
-              d={createCurvedPath(dot)}
-              fill="none"
-              stroke={lineColor}
-              strokeWidth="2"
-              initial={{ pathLength: 0, opacity: 0 }}
-              animate={{
-                pathLength: [0, 1],
-                opacity: [0, 0.4, 0],
-              }}
-              transition={{
-                duration: 3,
-                delay: 2 + i * 0.3,
-                repeat: Infinity,
-                repeatDelay: 1,
-                ease: "easeInOut",
-              }}
-            />
-          </g>
+        {/* Animated paths with gradient - simplified animation */}
+        {curvedPaths.map((path, i) => (
+          <motion.path
+            key={`path-${i}`}
+            d={path}
+            fill="none"
+            stroke="url(#path-gradient)"
+            strokeWidth="1.5"
+            initial={{ pathLength: 0, opacity: 0 }}
+            animate={isVisible ? {
+              pathLength: 1,
+              opacity: 0.7
+            } : { pathLength: 0, opacity: 0 }}
+            transition={{
+              duration: 1.5,
+              delay: 0.05 * i,
+              ease: "easeOut",
+            }}
+          />
         ))}
 
         {/* Gradient definitions */}
@@ -218,34 +255,34 @@ export function WorldMap({
           </radialGradient>
         </defs>
 
-        {/* Traveling particles - multiple per path for continuous effect */}
-        {dots.map((dot, i) => {
+        {/* Traveling particles - 2 per path for better visibility */}
+        {isVisible && curvedPaths.map((path, i) => {
           const pathId = `motion-path-${i}`;
           return (
             <g key={`particles-${i}`}>
-              <path id={pathId} d={createCurvedPath(dot)} fill="none" />
+              <path id={pathId} d={path} fill="none" />
 
-              {/* Multiple particles with different delays */}
-              {[0, 0.33, 0.66].map((delayMultiplier, particleIndex) => (
+              {/* Two particles with staggered delays */}
+              {[0, 0.5].map((delayMultiplier, particleIndex) => (
                 <circle
                   key={`particle-${i}-${particleIndex}`}
-                  r="3"
+                  r="2.5"
                   fill="url(#particle-gradient)"
                   opacity="0.8"
                 >
                   <animateMotion
-                    dur="3s"
+                    dur="2s"
                     repeatCount="indefinite"
-                    begin={`${i * 0.3 + delayMultiplier * 3}s`}
+                    begin={`${i * 0.05 + delayMultiplier * 2}s`}
                   >
                     <mpath href={`#${pathId}`} />
                   </animateMotion>
                   <animate
                     attributeName="opacity"
-                    values="0;0.8;0.8;0"
-                    dur="3s"
+                    values="0;0.9;0.9;0"
+                    dur="2s"
                     repeatCount="indefinite"
-                    begin={`${i * 0.3 + delayMultiplier * 3}s`}
+                    begin={`${i * 0.05 + delayMultiplier * 2}s`}
                   />
                 </circle>
               ))}
@@ -253,79 +290,33 @@ export function WorldMap({
           );
         })}
 
-        {/* Point markers with pulse animation */}
-        {dots.map((dot, i) => (
+        {/* Point markers - simplified, only show on major connection points */}
+        {projectedPoints
+          .filter((_, i) => i % 2 === 0) // Show only every other point to reduce render load
+          .map((points, i) => (
           <g key={`points-group-${i}`}>
-            {/* Start point */}
-            <g key={`start-${i}`}>
-              <circle
-                cx={projectPoint(dot.start.lat, dot.start.lng).x}
-                cy={projectPoint(dot.start.lat, dot.start.lng).y}
-                r="2"
-                fill={lineColor}
-              />
-              <circle
-                cx={projectPoint(dot.start.lat, dot.start.lng).x}
-                cy={projectPoint(dot.start.lat, dot.start.lng).y}
-                r="2"
-                fill={lineColor}
-                opacity="0.5"
-              >
-                <animate
-                  attributeName="r"
-                  from="2"
-                  to="8"
-                  dur="1.5s"
-                  begin="0s"
-                  repeatCount="indefinite"
-                />
-                <animate
-                  attributeName="opacity"
-                  from="0.5"
-                  to="0"
-                  dur="1.5s"
-                  begin="0s"
-                  repeatCount="indefinite"
-                />
-              </circle>
-            </g>
-
-            {/* End point */}
-            <g key={`end-${i}`}>
-              <circle
-                cx={projectPoint(dot.end.lat, dot.end.lng).x}
-                cy={projectPoint(dot.end.lat, dot.end.lng).y}
-                r="2"
-                fill={lineColor}
-              />
-              <circle
-                cx={projectPoint(dot.end.lat, dot.end.lng).x}
-                cy={projectPoint(dot.end.lat, dot.end.lng).y}
-                r="2"
-                fill={lineColor}
-                opacity="0.5"
-              >
-                <animate
-                  attributeName="r"
-                  from="2"
-                  to="8"
-                  dur="1.5s"
-                  begin="0s"
-                  repeatCount="indefinite"
-                />
-                <animate
-                  attributeName="opacity"
-                  from="0.5"
-                  to="0"
-                  dur="1.5s"
-                  begin="0s"
-                  repeatCount="indefinite"
-                />
-              </circle>
-            </g>
+            {/* Start point - static, no animation */}
+            <circle
+              cx={points.start.x}
+              cy={points.start.y}
+              r="2.5"
+              fill={lineColor}
+              opacity="0.8"
+            />
+            {/* End point - static, no animation */}
+            <circle
+              cx={points.end.x}
+              cy={points.end.y}
+              r="2.5"
+              fill={lineColor}
+              opacity="0.8"
+            />
           </g>
         ))}
       </svg>
     </div>
   );
-}
+};
+
+// Memoize component to prevent unnecessary re-renders
+export const WorldMap = memo(WorldMapComponent);

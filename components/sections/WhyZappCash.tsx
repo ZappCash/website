@@ -4,7 +4,21 @@ import { motion } from "framer-motion";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { GradientText } from "@/components/ui/GradientText";
 import { useInViewAnimation } from "@/hooks/useInViewAnimation";
-import { WorldMap } from "@/components/WorldMap";
+import dynamic from "next/dynamic";
+import { useState, useEffect, useRef } from "react";
+
+// Lazy load WorldMap component with priority loading
+const WorldMap = dynamic(
+  () => import("@/components/WorldMap").then(mod => mod.WorldMap),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-full h-full flex items-center justify-center">
+        <div className="text-primary/30 text-sm animate-pulse">Loading map...</div>
+      </div>
+    ),
+  }
+);
 
 
 const fadeInUp = {
@@ -62,6 +76,18 @@ function NarrativeContent() {
 }
 
 function GlobalConnections() {
+  const [shouldLoadMap, setShouldLoadMap] = useState(false);
+  const mapContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Start loading immediately after initial page render
+    const timer = setTimeout(() => {
+      setShouldLoadMap(true);
+    }, 1000); // Load after 1 second of page load
+
+    return () => clearTimeout(timer);
+  }, []);
+
   // Red de Conectividad Financiera Global - Conexiones estratégicas de alto impacto
   const connections = [
     // === América del Norte - Europa (Transatlántico) ===
@@ -226,7 +252,7 @@ function GlobalConnections() {
   ];
 
   return (
-    <div className="relative w-full min-h-[500px] flex flex-col">
+    <div ref={mapContainerRef} className="relative w-full min-h-[500px] flex flex-col">
       {/* Label */}
       <div className="mb-6 text-center">
         <p className="text-lg font-bold">
@@ -245,7 +271,13 @@ function GlobalConnections() {
           <div className="orb-cyan absolute w-64 h-64 opacity-5" />
         </div>
 
-        <WorldMap dots={connections} lineColor="#00FF88" />
+        {shouldLoadMap ? (
+          <WorldMap dots={connections} lineColor="#00FF88" />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center min-h-[400px]">
+            <div className="text-primary/20 text-sm">Preparing map...</div>
+          </div>
+        )}
       </div>
     </div>
   );
