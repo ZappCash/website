@@ -15,7 +15,7 @@ export function HeroContent({ headlineOpacity }: HeroContentProps) {
       {/* Trust Badge */}
       <motion.div
         variants={fadeInUp}
-        className="mb-10 inline-flex items-center gap-3 px-6 py-3 rounded-full"
+        className="mb-6 inline-flex items-center gap-3 px-6 py-3 rounded-full"
         style={{
           background: 'rgba(255, 255, 255, 0.08)',
           backdropFilter: 'blur(12px)',
@@ -35,7 +35,7 @@ export function HeroContent({ headlineOpacity }: HeroContentProps) {
       {/* Main Headline */}
       <motion.h1
         variants={fadeInUp}
-        className="text-6xl sm:text-7xl md:text-8xl lg:text-[88px] font-black leading-[1.05] mb-7 mx-auto max-w-[900px]"
+        className="text-6xl sm:text-7xl md:text-8xl lg:text-[88px] font-black leading-[1.05] mb-4 mx-auto max-w-[900px]"
         style={{
           letterSpacing: '-0.03em',
           opacity: headlineOpacity,
@@ -55,7 +55,7 @@ export function HeroContent({ headlineOpacity }: HeroContentProps) {
       {/* Subheadline */}
       <motion.p
         variants={fadeInUp}
-        className="text-lg sm:text-xl md:text-[20px] leading-[1.6] max-w-[680px] mx-auto mb-12"
+        className="text-lg sm:text-xl md:text-[20px] leading-[1.6] max-w-[680px] mx-auto mb-8"
         style={{
           color: 'rgba(255, 255, 255, 0.75)',
           letterSpacing: '0.2px',
