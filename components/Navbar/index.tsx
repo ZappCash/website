@@ -5,7 +5,7 @@ import { Menu } from 'lucide-react';
 import { NavbarLogo } from './NavbarLogo';
 import { NavbarMenuItem } from './NavbarMenuItem';
 import { MobileMenu } from './MobileMenu';
-import { Button } from '@/components/ui/Button';
+import { InteractiveHoverButton } from '@/components/ui/InteractiveHoverButton';
 import { menuItems } from './menuData';
 
 export function Navbar() {
@@ -63,13 +63,12 @@ export function Navbar() {
 
           {/* Desktop CTA Button */}
           <div className="hidden lg:block">
-            <Button
-              variant="primary"
-              size="md"
-              className="shadow-glow-sm hover:shadow-glow-md transition-all duration-300 whitespace-nowrap"
-            >
-              Join Waitlist
-            </Button>
+            <InteractiveHoverButton
+              text="Join Waitlist"
+              hoverBgColor="bg-white"
+              showDot={false}
+              className="shadow-glow-sm hover:shadow-glow-md transition-all duration-300 whitespace-nowrap !bg-white text-black"
+            />
           </div>
 
           {/* Mobile Menu Button */}
