@@ -41,16 +41,16 @@ const features = [
     imageSrc: "/images/features/Card.png",
   },
   {
-    tag: "🏢 B2B",
-    title: "B2B Solutions",
-    description: "Business dashboard for USDC payroll. Mass payments, reports, compliance.",
-    imageSrc: "/images/features/HomeView.png",
-  },
-  {
     tag: "⚡ Social",
     title: "Social Payments, No Hassle",
     description: "Contact directory, history, and @username search. Manage your connections like a social network.",
     imageSrc: "/images/features/SocialPayments.png",
+  },
+  {
+    tag: "🏢 B2B",
+    title: "B2B Solutions",
+    description: "Business dashboard for USDC payroll. Mass payments, reports, compliance.",
+    imageSrc: "/images/features/HomeView.png",
   },
 ];
 

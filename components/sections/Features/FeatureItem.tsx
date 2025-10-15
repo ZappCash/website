@@ -2,7 +2,7 @@
 
 import { IPhoneMockup } from "@/components/ui/IPhoneMockup";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { InteractiveHoverButton } from "@/components/ui/InteractiveHoverButton";
 
 interface FeatureItemProps {
   tag: string;
@@ -41,10 +41,12 @@ export function FeatureItem({ tag, title, description, imageSrc, reverse = false
         </p>
 
         {/* CTA Button */}
-        <button className="group inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 hover:border-primary/50 transition-all duration-300">
-          <span className="text-white font-medium">Learn More</span>
-          <ArrowRight className="w-5 h-5 text-primary group-hover:translate-x-1 transition-transform" />
-        </button>
+        <InteractiveHoverButton
+          text="Learn More"
+          hoverBgColor="bg-white"
+          showDot={false}
+          className="!bg-white/5 border border-white/10 text-white hover:!bg-white hover:text-black"
+        />
       </motion.div>
 
       {/* Mockup Column */}
