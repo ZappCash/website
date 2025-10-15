@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import { MenuItem, DropdownItem } from './types';
 import { Button } from '@/components/ui/Button';
+import { SmoothScrollLink } from '@/components/ui/SmoothScrollLink';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -133,9 +134,11 @@ export function MobileMenu({ isOpen, menuItems, onClose }: MobileMenuProps) {
               </nav>
 
               {/* CTA Button */}
-              <Button variant="primary" size="lg" className="w-full">
-                Join Waitlist
-              </Button>
+              <SmoothScrollLink href="#waitlist" onClick={onClose}>
+                <Button variant="primary" size="lg" className="w-full">
+                  Join Waitlist
+                </Button>
+              </SmoothScrollLink>
             </div>
           </motion.div>
         </>

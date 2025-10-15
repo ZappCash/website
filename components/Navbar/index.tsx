@@ -6,6 +6,7 @@ import { NavbarLogo } from './NavbarLogo';
 import { NavbarMenuItem } from './NavbarMenuItem';
 import { MobileMenu } from './MobileMenu';
 import { InteractiveHoverButton } from '@/components/ui/InteractiveHoverButton';
+import { SmoothScrollLink } from '@/components/ui/SmoothScrollLink';
 import { menuItems } from './menuData';
 
 export function Navbar() {
@@ -63,12 +64,14 @@ export function Navbar() {
 
           {/* Desktop CTA Button */}
           <div className="hidden lg:block">
-            <InteractiveHoverButton
-              text="Join Waitlist"
-              hoverBgColor="bg-white"
-              showDot={false}
-              className="shadow-glow-sm hover:shadow-glow-md transition-all duration-300 whitespace-nowrap !bg-white text-black"
-            />
+            <SmoothScrollLink href="#waitlist">
+              <InteractiveHoverButton
+                text="Join Waitlist"
+                hoverBgColor="bg-white"
+                showDot={false}
+                className="shadow-glow-sm hover:shadow-glow-md transition-all duration-300 whitespace-nowrap !bg-white text-black"
+              />
+            </SmoothScrollLink>
           </div>
 
           {/* Mobile Menu Button */}

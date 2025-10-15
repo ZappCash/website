@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Twitter, Github, Linkedin } from "lucide-react";
 import { InteractiveHoverButton } from "@/components/ui/InteractiveHoverButton";
+import { SmoothScrollLink } from "@/components/ui/SmoothScrollLink";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -218,11 +219,13 @@ const Footer = () => {
             <p className="text-gray-400 text-sm mb-4">
               Be among the first to experience the future of payments.
             </p>
-            <InteractiveHoverButton
-              text="Join Waitlist"
-              showDot={false}
-              className="text-dark-900 font-semibold text-sm hover:shadow-glow-md transition-all duration-300"
-            />
+            <SmoothScrollLink href="#waitlist">
+              <InteractiveHoverButton
+                text="Join Waitlist"
+                showDot={false}
+                className="text-dark-900 font-semibold text-sm hover:shadow-glow-md transition-all duration-300"
+              />
+            </SmoothScrollLink>
           </div>
         </div>
 

@@ -5,6 +5,7 @@ import { fadeInUp, scaleIn } from "@/lib/animations";
 import { GradientText } from "@/components/ui/GradientText";
 import { Lock } from "lucide-react";
 import { InteractiveHoverButton } from "@/components/ui/InteractiveHoverButton";
+import { SmoothScrollLink } from "@/components/ui/SmoothScrollLink";
 
 interface HeroContentProps {
   headlineOpacity: MotionValue<number>;
@@ -71,19 +72,21 @@ export function HeroContent({ headlineOpacity }: HeroContentProps) {
         variants={scaleIn}
         style={{ opacity: headlineOpacity }}
       >
-        <InteractiveHoverButton
-          text="Join Waitlist"
-          hoverBgColor="bg-white"
-          showDot={false}
-          className="inline-flex items-center justify-center gap-3 px-10 py-[18px] min-w-[300px] text-[18px] !bg-white text-black"
-          style={{
-            boxShadow: `
-              0 12px 32px rgba(255, 255, 255, 0.25),
-              0 4px 12px rgba(255, 255, 255, 0.15),
-              inset 0 1px 0 rgba(255, 255, 255, 0.3)
-            `
-          }}
-        />
+        <SmoothScrollLink href="#waitlist">
+          <InteractiveHoverButton
+            text="Join Waitlist"
+            hoverBgColor="bg-white"
+            showDot={false}
+            className="inline-flex items-center justify-center gap-3 px-10 py-[18px] min-w-[300px] text-[18px] !bg-white text-black"
+            style={{
+              boxShadow: `
+                0 12px 32px rgba(255, 255, 255, 0.25),
+                0 4px 12px rgba(255, 255, 255, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3)
+              `
+            }}
+          />
+        </SmoothScrollLink>
       </motion.div>
     </div>
   );
