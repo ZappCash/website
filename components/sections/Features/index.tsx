@@ -1,6 +1,7 @@
 "use client";
 
 import { FeatureItem } from "./FeatureItem";
+import { FirstFeatureWithScroll } from "./FirstFeatureWithScroll";
 
 const features = [
   {
@@ -74,16 +75,32 @@ export function Features() {
 
         {/* Features List */}
         <div className="space-y-32">
-          {features.map((feature, index) => (
-            <FeatureItem
-              key={index}
-              tag={feature.tag}
-              title={feature.title}
-              description={feature.description}
-              imageSrc={feature.imageSrc}
-              reverse={false}
-            />
-          ))}
+          {features.map((feature, index) => {
+            // First feature uses scroll effect
+            if (index === 0) {
+              return (
+                <FirstFeatureWithScroll
+                  key={index}
+                  tag={feature.tag}
+                  title={feature.title}
+                  description={feature.description}
+                  imageSrc={feature.imageSrc}
+                />
+              );
+            }
+
+            // Rest of features use normal layout
+            return (
+              <FeatureItem
+                key={index}
+                tag={feature.tag}
+                title={feature.title}
+                description={feature.description}
+                imageSrc={feature.imageSrc}
+                reverse={false}
+              />
+            );
+          })}
         </div>
       </div>
     </section>
