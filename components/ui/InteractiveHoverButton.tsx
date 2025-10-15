@@ -25,7 +25,7 @@ const InteractiveHoverButton = forwardRef<
       )}
       {...props}
     >
-      <div className="flex items-center gap-2">
+      <div className={cn("flex items-center gap-2", !showDot && "justify-center")}>
         {showDot && (
           <div className={cn("size-2 scale-100 rounded-lg transition-all duration-300 group-hover:scale-[100.8]", dotColor)}></div>
         )}
