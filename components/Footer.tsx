@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Twitter, Github, Linkedin } from "lucide-react";
-import { Zap } from "lucide-react";
+import { InteractiveHoverButton } from "@/components/ui/InteractiveHoverButton";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -17,18 +18,23 @@ const Footer = () => {
         <div className="grid grid-cols-2 gap-8 lg:grid-cols-5 lg:gap-12">
           {/* Column 1: Logo & Description */}
           <div className="col-span-2 lg:col-span-1">
-            <Link href="/" className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-                <Zap className="w-4 h-4 text-dark-900" fill="currentColor" />
+            <Link href="/" className="inline-block mb-4 -mt-12">
+              <div className="relative h-32 w-[200px]">
+                <Image
+                  src="/images/White-Logo.png"
+                  alt="ZappCash Logo"
+                  fill
+                  className="object-contain"
+                  priority
+                />
               </div>
-              <span className="gradient-text text-xl font-bold">ZAPPCASH</span>
             </Link>
             <p className="text-gray-400 text-sm mb-6 max-w-xs">
               The decentralized future of payments
             </p>
 
             {/* Social links */}
-            <div className="flex items-center gap-3 flex-wrap">
+            <div className="flex items-center gap-2">
               <a
                 href="https://instagram.com/zappcash"
                 target="_blank"
@@ -212,12 +218,11 @@ const Footer = () => {
             <p className="text-gray-400 text-sm mb-4">
               Be among the first to experience the future of payments.
             </p>
-            <Link
-              href="#waitlist"
-              className="inline-block px-6 py-3 bg-gradient-to-r from-primary to-secondary rounded-full text-dark-900 font-semibold text-sm hover:shadow-glow-md transition-all duration-300 hover:scale-105"
-            >
-              Join Waitlist
-            </Link>
+            <InteractiveHoverButton
+              text="Join Waitlist"
+              showDot={false}
+              className="text-dark-900 font-semibold text-sm hover:shadow-glow-md transition-all duration-300"
+            />
           </div>
         </div>
 

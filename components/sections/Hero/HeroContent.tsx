@@ -4,6 +4,7 @@ import { motion, MotionValue } from "framer-motion";
 import { fadeInUp, scaleIn } from "@/lib/animations";
 import { GradientText } from "@/components/ui/GradientText";
 import { Lock } from "lucide-react";
+import { InteractiveHoverButton } from "@/components/ui/InteractiveHoverButton";
 
 interface HeroContentProps {
   headlineOpacity: MotionValue<number>;
@@ -70,51 +71,19 @@ export function HeroContent({ headlineOpacity }: HeroContentProps) {
         variants={scaleIn}
         style={{ opacity: headlineOpacity }}
       >
-        <button
-          className="inline-flex items-center justify-center gap-3 px-10 py-[18px] min-w-[300px] rounded-full text-[18px] font-semibold transition-all duration-300 ease-out cursor-pointer select-none"
+        <InteractiveHoverButton
+          text="Join Waitlist"
+          hoverBgColor="bg-white"
+          showDot={false}
+          className="inline-flex items-center justify-center gap-3 px-10 py-[18px] min-w-[300px] text-[18px] !bg-white text-black"
           style={{
-            background: 'white',
-            color: 'black',
             boxShadow: `
               0 12px 32px rgba(255, 255, 255, 0.25),
               0 4px 12px rgba(255, 255, 255, 0.15),
               inset 0 1px 0 rgba(255, 255, 255, 0.3)
             `
           }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'translateY(-3px)';
-            e.currentTarget.style.boxShadow = `
-              0 16px 40px rgba(255, 255, 255, 0.35),
-              0 8px 16px rgba(255, 255, 255, 0.25),
-              inset 0 1px 0 rgba(255, 255, 255, 0.4)
-            `;
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.boxShadow = `
-              0 12px 32px rgba(255, 255, 255, 0.25),
-              0 4px 12px rgba(255, 255, 255, 0.15),
-              inset 0 1px 0 rgba(255, 255, 255, 0.3)
-            `;
-          }}
-          onMouseDown={(e) => {
-            e.currentTarget.style.transform = 'translateY(-1px)';
-            e.currentTarget.style.boxShadow = `
-              0 8px 24px rgba(255, 255, 255, 0.25),
-              0 4px 8px rgba(255, 255, 255, 0.15)
-            `;
-          }}
-          onMouseUp={(e) => {
-            e.currentTarget.style.transform = 'translateY(-3px)';
-            e.currentTarget.style.boxShadow = `
-              0 16px 40px rgba(255, 255, 255, 0.35),
-              0 8px 16px rgba(255, 255, 255, 0.25),
-              inset 0 1px 0 rgba(255, 255, 255, 0.4)
-            `;
-          }}
-        >
-          Join Waitlist
-        </button>
+        />
       </motion.div>
     </div>
   );
