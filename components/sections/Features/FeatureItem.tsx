@@ -74,7 +74,7 @@ export function FeatureItem({ tag, title, description, imageSrc, reverse = false
           className="relative w-full scale-[0.45] sm:scale-[0.55] lg:scale-[0.65]"
         >
           {/* Green Gradient Glow Behind Mockup */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-[60%] -translate-y-1/2 w-[800px] h-[800px] pointer-events-none">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 lg:-translate-x-[60%] -translate-y-1/2 w-[800px] h-[800px] pointer-events-none">
             <div className="absolute inset-0 rounded-full opacity-80" style={{
               background: 'radial-gradient(circle, rgba(0, 255, 136, 0.8) 0%, rgba(0, 255, 136, 0.5) 20%, rgba(0, 204, 102, 0.3) 40%, transparent 70%)',
               filter: 'blur(100px)'
