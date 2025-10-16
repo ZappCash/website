@@ -70,7 +70,7 @@ export function Features() {
             Everything you need
           </h2>
           <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-            A complete digital payments platform designed for Costa Rica
+            A complete digital payments platform designed for the world
           </p>
         </div>
 
