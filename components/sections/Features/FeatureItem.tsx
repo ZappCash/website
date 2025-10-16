@@ -1,8 +1,9 @@
 "use client";
 
 import { IPhoneMockup } from "@/components/ui/IPhoneMockup";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { InteractiveHoverButton } from "@/components/ui/InteractiveHoverButton";
+import { useRef } from "react";
 
 interface FeatureItemProps {
   tag: string;
@@ -13,8 +14,20 @@ interface FeatureItemProps {
 }
 
 export function FeatureItem({ tag, title, description, imageSrc, reverse = false }: FeatureItemProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Track scroll progress of this feature item
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
+
+  // Rotation from right to left (-90deg to 0deg)
+  const rotateY = useTransform(scrollYProgress, [0, 0.5, 1], [-90, 0, 0]);
+  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.5, 1], [0, 1, 1, 1]);
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1, 1]);
   return (
-    <div className={`grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center py-20 ${reverse ? 'lg:flex-row-reverse' : ''}`}>
+    <div ref={containerRef} className={`grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center py-20 ${reverse ? 'lg:flex-row-reverse' : ''}`}>
       {/* Content Column */}
       <motion.div
         initial={{ opacity: 0, x: reverse ? 50 : -50 }}
@@ -49,15 +62,17 @@ export function FeatureItem({ tag, title, description, imageSrc, reverse = false
         />
       </motion.div>
 
-      {/* Mockup Column */}
-      <motion.div
-        initial={{ opacity: 0, x: reverse ? -50 : 50 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-        className={`flex items-center justify-center ${reverse ? 'lg:order-1' : ''}`}
-      >
-        <div className="relative w-full scale-[0.45] sm:scale-[0.55] lg:scale-[0.65]">
+      {/* Mockup Column with 3D Rotation */}
+      <div className={`flex items-center justify-center ${reverse ? 'lg:order-1' : ''}`} style={{ perspective: "2000px" }}>
+        <motion.div
+          style={{
+            rotateY,
+            opacity,
+            scale,
+            transformStyle: "preserve-3d",
+          }}
+          className="relative w-full scale-[0.45] sm:scale-[0.55] lg:scale-[0.65]"
+        >
           {/* Green Gradient Glow Behind Mockup */}
           <div className="absolute top-1/2 left-1/2 -translate-x-[60%] -translate-y-1/2 w-[800px] h-[800px] pointer-events-none">
             <div className="absolute inset-0 rounded-full opacity-60" style={{
@@ -76,8 +91,8 @@ export function FeatureItem({ tag, title, description, imageSrc, reverse = false
               alt={title}
             />
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
+      </div>
     </div>
   );
 }
