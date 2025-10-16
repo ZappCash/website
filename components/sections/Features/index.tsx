@@ -2,6 +2,7 @@
 
 import { FeatureItem } from "./FeatureItem";
 import { FirstFeatureWithScroll } from "./FirstFeatureWithScroll";
+import { B2BFeatureItem } from "./B2BFeatureItem";
 
 const features = [
   {
@@ -50,7 +51,7 @@ const features = [
     tag: "🏢 B2B",
     title: "B2B Solutions",
     description: "Business dashboard for USDC payroll. Mass payments, reports, compliance.",
-    imageSrc: "/images/features/HomeView.png",
+    imageSrc: "/images/features/B2BSolutions.png",
   },
 ];
 
@@ -80,6 +81,19 @@ export function Features() {
             if (index === 0) {
               return (
                 <FirstFeatureWithScroll
+                  key={index}
+                  tag={feature.tag}
+                  title={feature.title}
+                  description={feature.description}
+                  imageSrc={feature.imageSrc}
+                />
+              );
+            }
+
+            // B2B feature uses MacBook mockup
+            if (feature.tag === "🏢 B2B") {
+              return (
+                <B2BFeatureItem
                   key={index}
                   tag={feature.tag}
                   title={feature.title}
