@@ -43,7 +43,7 @@ export function Navbar() {
             backdrop-blur-xl rounded-full
             border shadow-2xl
             px-6 sm:px-8 lg:px-12 py-3 lg:py-3.5
-            flex items-center gap-8 lg:gap-16
+            flex items-center gap-6 lg:gap-8
             transition-all duration-300 ease-out
             ${
               isScrolled

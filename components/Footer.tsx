@@ -22,7 +22,7 @@ const Footer = () => {
             <Link href="/" className="inline-block mb-4 -mt-12">
               <div className="relative h-32 w-[200px]">
                 <Image
-                  src="/images/White-Logo.png"
+                  src="/images/White-Logo.svg"
                   alt="ZappCash Logo"
                   fill
                   className="object-contain"

@@ -32,15 +32,15 @@ export function Hero() {
   });
 
   // Scroll-based transformations using Framer Motion
-  const headlineOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
-  const devicesScale = useTransform(scrollYProgress, [0, 1], [1, 1.3]);
-  const devicesTranslateY = useTransform(scrollYProgress, [0, 1], [0, -300]);
+  const headlineOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const devicesScale = useTransform(scrollYProgress, [0, 1.2], [1, 1.3]);
+  const devicesTranslateY = useTransform(scrollYProgress, [0, 1.2], [0, -300]);
 
   // Gradually darken background as user scrolls to reduce saturation
-  const backgroundDarkness = useTransform(scrollYProgress, [0, 0.4, 1], [0, 0.5, 0.8]);
+  const backgroundDarkness = useTransform(scrollYProgress, [0, 0.6, 1.2], [0, 0.5, 0.8]);
 
   // iPhone rotation: starts at -30deg and reaches 0deg on scroll
-  const phoneRotation = useTransform(scrollYProgress, [0, 0.25], [-30, 0]);
+  const phoneRotation = useTransform(scrollYProgress, [0, 0.4], [-30, 0]);
 
   // Show/hide particles based on scroll position
   const [showParticles, setShowParticles] = useState(true);

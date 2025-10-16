@@ -30,7 +30,7 @@ export function HeroContent({ headlineOpacity }: HeroContentProps) {
       >
         <Lock className="w-4 h-4 text-white/90" />
         <span className="text-sm font-medium text-white/85 tracking-wide">
-          Trusted by thousands since 2024
+          Trusted by thousands since 2025
         </span>
       </motion.div>
 
