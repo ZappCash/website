@@ -75,12 +75,12 @@ export function FeatureItem({ tag, title, description, imageSrc, reverse = false
         >
           {/* Green Gradient Glow Behind Mockup */}
           <div className="absolute top-1/2 left-1/2 -translate-x-[60%] -translate-y-1/2 w-[800px] h-[800px] pointer-events-none">
-            <div className="absolute inset-0 rounded-full opacity-60" style={{
-              background: 'radial-gradient(circle, rgba(0, 255, 136, 0.6) 0%, rgba(0, 255, 136, 0.3) 20%, rgba(0, 204, 102, 0.2) 40%, transparent 70%)',
+            <div className="absolute inset-0 rounded-full opacity-80" style={{
+              background: 'radial-gradient(circle, rgba(0, 255, 136, 0.8) 0%, rgba(0, 255, 136, 0.5) 20%, rgba(0, 204, 102, 0.3) 40%, transparent 70%)',
               filter: 'blur(100px)'
             }} />
-            <div className="absolute inset-0 rounded-full opacity-40 animate-pulse" style={{
-              background: 'radial-gradient(circle, rgba(0, 255, 136, 0.8) 0%, rgba(0, 204, 102, 0.4) 30%, transparent 60%)',
+            <div className="absolute inset-0 rounded-full opacity-60 animate-pulse" style={{
+              background: 'radial-gradient(circle, rgba(0, 255, 136, 1) 0%, rgba(0, 204, 102, 0.6) 30%, transparent 60%)',
               filter: 'blur(60px)'
             }} />
           </div>
