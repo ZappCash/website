@@ -5,19 +5,16 @@ import Image from 'next/image';
 
 export function NavbarLogo() {
   return (
-    <Link href="/" className="flex items-center gap-2.5 group">
-      <div className="relative w-12 h-12">
+    <Link href="/" className="group">
+      <div className="relative h-12 w-40">
         <Image
-          src="/images/Zap.png"
-          alt="Zap Icon"
+          src="/images/White-Logo.svg"
+          alt="ZappCash Logo"
           fill
-          className="object-contain transition-all duration-300 group-hover:scale-110"
+          className="object-contain transition-all duration-300 group-hover:scale-105"
           priority
         />
       </div>
-      <span className="text-white font-black text-xl lg:text-2xl tracking-tight">
-        ZAPPCASH
-      </span>
     </Link>
   );
 }
