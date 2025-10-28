@@ -4,6 +4,7 @@ import { MacBookMockup } from "@/components/ui/MacBookMockup";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { InteractiveHoverButton } from "@/components/ui/InteractiveHoverButton";
 import { useRef } from "react";
+import { useIsMobile } from "@/hooks/useMediaQuery";
 
 interface B2BFeatureItemProps {
   tag: string;
@@ -15,6 +16,7 @@ interface B2BFeatureItemProps {
 
 export function B2BFeatureItem({ tag, title, description, imageSrc, reverse = false }: B2BFeatureItemProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
 
   // Track scroll progress of this feature item
   const { scrollYProgress } = useScroll({
@@ -22,7 +24,7 @@ export function B2BFeatureItem({ tag, title, description, imageSrc, reverse = fa
     offset: ["start end", "end start"]
   });
 
-  // Rotation from right to left (-90deg to 0deg)
+  // Desktop: 3D rotation from right to left (-90deg to 0deg)
   const rotateY = useTransform(scrollYProgress, [0, 0.5, 1], [-90, 0, 0]);
   const opacity = useTransform(scrollYProgress, [0, 0.3, 0.5, 1], [0, 1, 1, 1]);
   const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1, 1]);
@@ -64,26 +66,46 @@ export function B2BFeatureItem({ tag, title, description, imageSrc, reverse = fa
       </motion.div>
 
       {/* MacBook Mockup Column with 3D Rotation */}
-      <div className={`flex items-center justify-center ${reverse ? 'lg:order-1' : ''}`} style={{ perspective: "2000px" }}>
+      <div className={`flex items-center justify-center ${reverse ? 'lg:order-1' : ''}`} style={!isMobile ? { perspective: "2000px" } : {}}>
         <motion.div
-          style={{
-            rotateY,
-            opacity,
-            scale,
-            transformStyle: "preserve-3d",
-          }}
+          // Mobile: simple whileInView animation with 2D rotation
+          // Desktop: scroll-driven 3D rotation
+          {...(isMobile ? {
+            initial: { opacity: 0, x: reverse ? 50 : -50, scale: 0.9, rotateZ: reverse ? 12 : -12 },
+            whileInView: { opacity: 1, x: 0, scale: 1, rotateZ: 0 },
+            viewport: { once: true, margin: "-100px" },
+            transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] }
+          } : {
+            style: {
+              rotateY,
+              opacity,
+              scale,
+              transformStyle: "preserve-3d" as const,
+            }
+          })}
           className="relative w-full"
         >
           {/* Green Gradient Glow Behind Mockup */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[550px] pointer-events-none">
-            <div className="absolute inset-0 rounded-full opacity-70" style={{
-              background: 'radial-gradient(ellipse, rgba(0, 255, 136, 0.7) 0%, rgba(0, 255, 136, 0.45) 20%, rgba(0, 204, 102, 0.25) 40%, transparent 70%)',
-              filter: 'blur(110px)'
-            }} />
-            <div className="absolute inset-0 rounded-full opacity-50 animate-pulse" style={{
-              background: 'radial-gradient(ellipse, rgba(0, 255, 136, 0.9) 0%, rgba(0, 204, 102, 0.5) 30%, transparent 60%)',
-              filter: 'blur(70px)'
-            }} />
+            {/* Desktop: Full blur effects */}
+            {!isMobile ? (
+              <>
+                <div className="absolute inset-0 rounded-full opacity-70" style={{
+                  background: 'radial-gradient(ellipse, rgba(0, 255, 136, 0.7) 0%, rgba(0, 255, 136, 0.45) 20%, rgba(0, 204, 102, 0.25) 40%, transparent 70%)',
+                  filter: 'blur(110px)'
+                }} />
+                <div className="absolute inset-0 rounded-full opacity-50 animate-pulse" style={{
+                  background: 'radial-gradient(ellipse, rgba(0, 255, 136, 0.9) 0%, rgba(0, 204, 102, 0.5) 30%, transparent 60%)',
+                  filter: 'blur(70px)'
+                }} />
+              </>
+            ) : (
+              /* Mobile: Lighter glow without heavy blur */
+              <div className="absolute inset-0 rounded-full opacity-40" style={{
+                background: 'radial-gradient(ellipse, rgba(0, 255, 136, 0.5) 0%, rgba(0, 255, 136, 0.2) 30%, transparent 60%)',
+                filter: 'blur(40px)'
+              }} />
+            )}
           </div>
 
           <div className="relative z-10">
