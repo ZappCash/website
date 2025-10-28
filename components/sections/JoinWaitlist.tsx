@@ -4,32 +4,65 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { InteractiveHoverButton } from "@/components/ui/InteractiveHoverButton";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/lib/supabase";
+import { Toast } from "@/components/ui/Toast";
 
 export function JoinWaitlist() {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastType, setToastType] = useState<"success" | "error">("success");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simular envío (aquí puedes integrar tu API)
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    try {
+      const { error: supabaseError } = await supabase
+        .from('waitlist')
+        .insert([{ email }]);
 
-    setIsSubmitting(false);
-    setIsSuccess(true);
-    setEmail("");
+      if (supabaseError) {
+        // Manejar error de email duplicado
+        if (supabaseError.code === '23505') {
+          setToastMessage('This email is already on the waitlist!');
+        } else {
+          setToastMessage('Something went wrong. Please try again.');
+        }
+        setToastType('error');
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 3000);
+        setIsSubmitting(false);
+        return;
+      }
 
-    setTimeout(() => setIsSuccess(false), 3000);
+      // Éxito
+      setToastMessage('🎉 You\'re on the list! We\'ll be in touch soon.');
+      setToastType('success');
+      setShowToast(true);
+      setEmail("");
+      setTimeout(() => setShowToast(false), 3000);
+    } catch (err) {
+      setToastMessage('Something went wrong. Please try again.');
+      setToastType('error');
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 3000);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <section id="waitlist" className="relative py-16 md:py-24 px-4 overflow-hidden mb-16">
-      {/* Background gradient effect */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black via-primary/5 to-black" />
-      {/* Grid pattern background */}
-      <div className="absolute inset-0 grid-pattern opacity-30" />
+    <>
+      {/* Toast notification */}
+      <Toast message={toastMessage} type={toastType} isVisible={showToast} />
+
+      <section id="waitlist" className="relative py-16 md:py-24 px-4 overflow-hidden mb-16">
+        {/* Background gradient effect */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-primary/5 to-black" />
+        {/* Grid pattern background */}
+        <div className="absolute inset-0 grid-pattern opacity-30" />
 
       <div className="container mx-auto max-w-4xl relative z-10">
         {/* Simple heading */}
@@ -76,8 +109,7 @@ export function JoinWaitlist() {
                     "relative w-full px-6 py-4 bg-zinc-900 border border-zinc-800 rounded-lg",
                     "text-white placeholder:text-gray-500",
                     "focus:outline-none focus:border-zinc-700 focus-visible:!outline-none focus-visible:!border-zinc-700",
-                    "transition-all duration-300",
-                    isSuccess && "border-green-500 bg-green-500/10"
+                    "transition-all duration-300"
                   )}
                   style={{ outline: 'none' }}
                   disabled={isSubmitting}
@@ -91,25 +123,15 @@ export function JoinWaitlist() {
                   disabled={isSubmitting || !email}
                   className={cn(
                     "min-w-[200px] text-dark-900 font-semibold transition-all duration-300 justify-center",
-                    isSubmitting && "opacity-50 cursor-not-allowed",
-                    isSuccess && "bg-green-500"
+                    isSubmitting && "opacity-50 cursor-not-allowed"
                   )}
                   hoverBgColor="bg-primary"
                   dotColor="bg-dark-900"
                   showDot={false}
                 >
-                  {isSubmitting ? "Joining..." : isSuccess ? "Welcome! ✓" : "Join Waitlist"}
+                  {isSubmitting ? "Joining..." : "Join Waitlist"}
                 </InteractiveHoverButton>
               </div>
-
-              {/* Success message */}
-              {isSuccess && (
-                <div className="text-center animate-in fade-in slide-in-from-bottom-3 duration-500">
-                  <p className="text-green-400 font-medium">
-                    🎉 You&apos;re on the list! Check your email for confirmation.
-                  </p>
-                </div>
-              )}
             </form>
 
             {/* Decorative elements */}
@@ -119,6 +141,7 @@ export function JoinWaitlist() {
         </div>
 
       </div>
-    </section>
+      </section>
+    </>
   );
 }
