@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "optimize-images": "tsx scripts/convert-and-replace-assets.ts && tsx scripts/replace-png-with-webp.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -36,7 +37,9 @@
     "eslint": "^9.37.0",
     "eslint-config-next": "^15.5.4",
     "postcss": "^8.5.6",
+    "sharp": "^0.34.4",
     "tailwindcss": "^4.1.14",
+    "tsx": "^4.20.6",
     "typescript": "^5.9.3"
   }
 }
