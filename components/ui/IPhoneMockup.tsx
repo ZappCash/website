@@ -61,6 +61,7 @@ export function IPhoneMockup({
           preserveAspectRatio="xMidYMid slice"
           style={{ clipPath: 'url(#roundedCorners)' }}
           href={src}
+          aria-label={alt}
         />
       )}
       <defs>

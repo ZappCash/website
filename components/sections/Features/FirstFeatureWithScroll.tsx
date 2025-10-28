@@ -4,6 +4,7 @@ import { IPhoneMockup } from "@/components/ui/IPhoneMockup";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { InteractiveHoverButton } from "@/components/ui/InteractiveHoverButton";
 import { useRef } from "react";
+import { useIsMobile } from "@/hooks/useMediaQuery";
 
 interface FirstFeatureWithScrollProps {
   tag: string;
@@ -14,10 +15,11 @@ interface FirstFeatureWithScrollProps {
 
 export function FirstFeatureWithScroll({ tag, title, description, imageSrc }: FirstFeatureWithScrollProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start end", "end center"]
+    offset: isMobile ? ["start center", "end center"] : ["start end", "end center"]
   });
 
   const rotate = useTransform(scrollYProgress, [0, 0.5], [20, 0]);
@@ -66,25 +68,45 @@ export function FirstFeatureWithScroll({ tag, title, description, imageSrc }: Fi
         viewport={{ once: true }}
         transition={{ duration: 0.6, delay: 0.2 }}
         className="flex items-center justify-center"
-        style={{ perspective: "1000px" }}
+        style={!isMobile ? { perspective: "1000px" } : {}}
       >
         <motion.div
-          style={{
-            rotateX: rotate,
-            scale,
-          }}
+          // Mobile: simple scale animation with 2D rotation
+          // Desktop: scroll-driven rotateX + scale
+          {...(isMobile ? {
+            initial: { opacity: 0, scale: 0.9, rotateZ: -12 },
+            whileInView: { opacity: 1, scale: 1, rotateZ: 0 },
+            viewport: { once: true, margin: "-100px" },
+            transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] }
+          } : {
+            style: {
+              rotateX: rotate,
+              scale,
+            }
+          })}
           className="relative w-full scale-[0.45] sm:scale-[0.55] lg:scale-[0.65]"
         >
           {/* Green Gradient Glow Behind Mockup */}
           <div className="absolute top-1/2 left-1/2 -translate-x-[60%] -translate-y-1/2 w-[800px] h-[800px] pointer-events-none">
-            <div className="absolute inset-0 rounded-full opacity-60" style={{
-              background: 'radial-gradient(circle, rgba(0, 255, 136, 0.6) 0%, rgba(0, 255, 136, 0.3) 20%, rgba(0, 204, 102, 0.2) 40%, transparent 70%)',
-              filter: 'blur(100px)'
-            }} />
-            <div className="absolute inset-0 rounded-full opacity-40 animate-pulse" style={{
-              background: 'radial-gradient(circle, rgba(0, 255, 136, 0.8) 0%, rgba(0, 204, 102, 0.4) 30%, transparent 60%)',
-              filter: 'blur(60px)'
-            }} />
+            {/* Desktop: Full blur effects */}
+            {!isMobile ? (
+              <>
+                <div className="absolute inset-0 rounded-full opacity-60" style={{
+                  background: 'radial-gradient(circle, rgba(0, 255, 136, 0.6) 0%, rgba(0, 255, 136, 0.3) 20%, rgba(0, 204, 102, 0.2) 40%, transparent 70%)',
+                  filter: 'blur(100px)'
+                }} />
+                <div className="absolute inset-0 rounded-full opacity-40 animate-pulse" style={{
+                  background: 'radial-gradient(circle, rgba(0, 255, 136, 0.8) 0%, rgba(0, 204, 102, 0.4) 30%, transparent 60%)',
+                  filter: 'blur(60px)'
+                }} />
+              </>
+            ) : (
+              /* Mobile: Lighter glow without heavy blur */
+              <div className="absolute inset-0 rounded-full opacity-40" style={{
+                background: 'radial-gradient(circle, rgba(0, 255, 136, 0.5) 0%, rgba(0, 255, 136, 0.2) 30%, transparent 60%)',
+                filter: 'blur(40px)'
+              }} />
+            )}
           </div>
 
           <div className="relative z-10">
