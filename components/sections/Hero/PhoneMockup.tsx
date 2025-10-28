@@ -29,7 +29,7 @@ export function PhoneMockup({ devicesScale, devicesTranslateY, phoneRotation }: 
       >
         <div className="scale-[0.6]">
           <IPhoneMockup
-            src="/images/features/HomeView.png"
+            src="/images/features/HomeView.webp"
             alt="ZappCash Home"
           />
         </div>
