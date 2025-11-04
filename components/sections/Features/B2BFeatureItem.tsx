@@ -58,10 +58,11 @@ export function B2BFeatureItem({ tag, title, description, imageSrc, reverse = fa
 
         {/* CTA Button */}
         <InteractiveHoverButton
-          text="Learn More"
+          text="Try our prototype"
           hoverBgColor="bg-white"
           showDot={false}
           className="!bg-white/5 border border-white/10 text-white hover:!bg-white hover:text-black"
+          onClick={() => window.open("https://proto.zappcash.finance", "_blank")}
         />
       </motion.div>
 
